@@ -24,9 +24,13 @@ Run mkdir -p /kafka/config
 Run ln -sf /kafka/server/kafka_* /kafka/server/kafka 
 
 VOLUME ["/kafka/config"]
+VOLUME ["/kafka/logs"]
 EXPOSE 9092
 
 COPY ./entryPoint.sh /entryPoint.sh
-ENTRYPOINT /entryPoint.sh
-CMD /kafka/server/kafka/bin/kafka-server-start.sh /kafka/config/kraft/server.properties
+COPY ./configIni.sh /configIni.sh
+COPY ./testBroker.sh /testBroker.sh
+
+ENTRYPOINT ["/entryPoint.sh"]
+CMD ["/kafka/server/kafka/bin/kafka-server-start.sh", "/kafka/config/kraft/kraft.properties"]
 
