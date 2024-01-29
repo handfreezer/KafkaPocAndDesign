@@ -1,0 +1,120 @@
+version: '3.8'
+
+x-kfk-img: &ptrKfkImg
+  build:
+    context: "./image-kfk"
+    dockerfile: "kraft.dockerfile"
+
+x-kfk-brk-cmn: &ptrKfkBrkCmn
+  <<: *ptrKfkImg
+  command: kraft
+  ports:
+    - "9092"
+  networks:
+    - netKfk
+  healthcheck:
+    test: "bash -c 'printf \"\" > /dev/tcp/127.0.0.1/9092; exit $$?;'"
+    interval: 10s
+    timeout: 10s
+    retries: 2
+    start_period: 40s
+  restart: unless-stopped
+
+x-kfk-cnt-cmn: &ptrKfkCntCmn
+  <<: *ptrKfkImg
+  command: connect
+  networks:
+    - netKfk
+  volumes:
+    - ./connect/connect-distributed.properties:/kafka/connect/connect-distributed.properties
+    - ./smt:/kafka/connect/smt
+  depends_on:
+    kfkbrkdst-00:
+      condition: service_healthy
+    kfkbrkdst-01:
+      condition: service_healthy
+  healthcheck:
+    test: "bash -c 'printf \"\" > /dev/tcp/127.0.0.1/8083; exit $$?;'"
+    interval: 10s
+    timeout: 10s
+    retries: 2
+    start_period: 40s
+  restart: unless-stopped
+  environment:
+    KAFKA_HEAP_OPTS: "-Xms256M -Xmx256m"
+
+services:
+  kfkbrksrc-00:
+    hostname: kfkbrksrc-00
+    <<: *ptrKfkBrkCmn
+    env_file:
+      - path: ./kfkBrkSrc.env
+        required: true
+      - path: ./kfkBrkSrc00.env
+        required: true
+    volumes:
+      - ./kfk/brk/src/00:/kafka/kraft
+
+  kfkbrksrc-01:
+    hostname: kfkbrksrc-01
+    <<: *ptrKfkBrkCmn
+    env_file:
+      - path: ./kfkBrkSrc.env
+        required: true
+      - path: ./kfkBrkSrc01.env
+        required: true
+    volumes:
+      - ./kfk/brk/src/01:/kafka/kraft
+
+  kfkbrkdst-00:
+    hostname: kfkbrkdst-00
+    <<: *ptrKfkBrkCmn
+    env_file:
+      - path: ./kfkBrkDst.env
+        required: true
+      - path: ./kfkBrkDst00.env
+        required: true
+    volumes:
+      - ./kfk/brk/dst/00:/kafka/kraft
+
+  kfkbrkdst-01:
+    hostname: kfkbrkdst-01
+    <<: *ptrKfkBrkCmn
+    env_file:
+      - path: ./kfkBrkDst.env
+        required: true
+      - path: ./kfkBrkDst01.env
+        required: true
+    volumes:
+      - ./kfk/brk/dst/01:/kafka/kraft
+
+  kfkcnt-00:
+    <<: *ptrKfkCntCmn
+    hostname: srvcnt00
+    ports:
+      - '8083:8083'
+
+  kfkcnt-01:
+    <<: *ptrKfkCntCmn
+    hostname: srccnt01
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    volumes:
+      - ./ui/config.yml:/etc/kafkaui/dynamic_config.yaml
+    environment:
+      DYNAMIC_CONFIG_ENABLED: 'true'
+    networks:
+      - netKfk
+    ports:
+      - '8080:8080'
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider localhost:8080 || exit 1
+      interval: 10s
+      timeout: 10s
+      retries: 2
+      start_period: 60s
+
+networks:
+  netKfk:
+
