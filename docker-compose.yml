@@ -26,8 +26,8 @@ x-kfk-cnt-cmn: &ptrKfkCntCmn
   networks:
     - netKfk
   volumes:
-    - ./connect/connect-distributed.properties:/kafka/connect/connect-distributed.properties
-    - ./smt:/kafka/connect/smt
+    - ./datas-poc/connect/connect-distributed.properties:/kafka/connect/connect-distributed.properties
+    - ./datas-poc/smt:/kafka/connect/smt
   depends_on:
     kfkbrkdst-00:
       condition: service_healthy
@@ -48,45 +48,45 @@ services:
     hostname: kfkbrksrc-00
     <<: *ptrKfkBrkCmn
     env_file:
-      - path: ./kfkBrkSrc.env
+      - path: ./datas-poc/kfkBrkSrc.env
         required: true
-      - path: ./kfkBrkSrc00.env
+      - path: ./datas-poc/kfkBrkSrc00.env
         required: true
     volumes:
-      - ./kfk/brk/src/00:/kafka/kraft
+      - ./datas-poc/kfk/brk/src/00:/kafka/kraft
 
   kfkbrksrc-01:
     hostname: kfkbrksrc-01
     <<: *ptrKfkBrkCmn
     env_file:
-      - path: ./kfkBrkSrc.env
+      - path: ./datas-poc/kfkBrkSrc.env
         required: true
-      - path: ./kfkBrkSrc01.env
+      - path: ./datas-poc/kfkBrkSrc01.env
         required: true
     volumes:
-      - ./kfk/brk/src/01:/kafka/kraft
+      - ./datas-poc/kfk/brk/src/01:/kafka/kraft
 
   kfkbrkdst-00:
     hostname: kfkbrkdst-00
     <<: *ptrKfkBrkCmn
     env_file:
-      - path: ./kfkBrkDst.env
+      - path: ./datas-poc/kfkBrkDst.env
         required: true
-      - path: ./kfkBrkDst00.env
+      - path: ./datas-poc/kfkBrkDst00.env
         required: true
     volumes:
-      - ./kfk/brk/dst/00:/kafka/kraft
+      - ./datas-poc/kfk/brk/dst/00:/kafka/kraft
 
   kfkbrkdst-01:
     hostname: kfkbrkdst-01
     <<: *ptrKfkBrkCmn
     env_file:
-      - path: ./kfkBrkDst.env
+      - path: ./datas-poc/kfkBrkDst.env
         required: true
-      - path: ./kfkBrkDst01.env
+      - path: ./datas-poc/kfkBrkDst01.env
         required: true
     volumes:
-      - ./kfk/brk/dst/01:/kafka/kraft
+      - ./datas-poc/kfk/brk/dst/01:/kafka/kraft
 
   kfkcnt-00:
     <<: *ptrKfkCntCmn
@@ -101,7 +101,7 @@ services:
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     volumes:
-      - ./ui/config.yml:/etc/kafkaui/dynamic_config.yaml
+      - ./datas-poc/ui/config.yml:/etc/kafkaui/dynamic_config.yaml
     environment:
       DYNAMIC_CONFIG_ENABLED: 'true'
     networks:

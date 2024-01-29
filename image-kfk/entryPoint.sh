@@ -28,6 +28,9 @@ else
 					mkdir -p "${DIR_KRAFT}"
 					cp ${DIR_KFK}/config/kraft/server.properties ${KRAFT_CONFIG}
 					/configIni.sh KRAFT ${KRAFT_CONFIG}
+				fi
+				if [ 0 -lt "$(${DIR_KFK}/bin/kafka-storage.sh info -c ${KRAFT_CONFIG} | grep -c "not formatted")" ]
+				then
 					${DIR_KFK}/bin/kafka-storage.sh format -t "$KAFKA_CLUSTER_ID" -c ${KRAFT_CONFIG}
 				fi
 				exec "${DIR_KFK}/bin/kafka-server-start.sh" "${KRAFT_CONFIG}"
