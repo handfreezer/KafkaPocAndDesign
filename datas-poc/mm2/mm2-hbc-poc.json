@@ -1,0 +1,12 @@
+{
+  "name": "mm2-hbc-poc",
+
+  "connector.class": "org.apache.kafka.connect.mirror.MirrorHeartbeatConnector",
+  "key.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+  "value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+
+  "source.cluster.alias": "cluster-src",
+  "source.cluster.bootstrap.servers": "kfkbrksrc-00:9092,kfkbrksrc-01:9092",
+  "target.cluster.alias": "cluster-dst",
+  "target.cluster.bootstrap.servers": "kfkbrkdst-00:9092,kfkbrkdst-01:9092"
+}

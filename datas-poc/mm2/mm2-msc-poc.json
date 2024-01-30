@@ -1,0 +1,29 @@
+{
+  "connector.class": "org.apache.kafka.connect.mirror.MirrorSourceConnector",
+  "name": "mm2-msc-poc",
+
+  "tasks.max": "2",
+  "replication.factor": "1",
+  "offset-syncs.topic.location": "target",
+
+  "topics": ".*",
+  "refresh.topics.enabled": true,
+  "refresh.topics.interval.seconds": 10,
+
+  "sync.topic.acls.enabled": false,
+  "sync.topic.acls.interval.seconds": 60,
+  "sync.topic.configs.enabled": false,
+  "sync.topic.configs.interval.seconds": 60,
+
+  "transforms": "insertAppIdHeader,insertuuid",
+  "transforms.insertuuid.type": "net.ulukai.kafka.connect.smt.AddUuid",
+  "transforms.insertuuid.uuid.field.name": "uuid-fieldname",
+  "transforms.insertAppIdHeader.type": "org.apache.kafka.connect.transforms.InsertHeader",
+  "transforms.insertAppIdHeader.header": "ulukai.test",
+  "transforms.insertAppIdHeader.value.literal": "insertedHeaderValue",
+
+  "source.cluster.alias": "cluster-src",
+  "source.cluster.bootstrap.servers": "kfkbrksrc-00:9092,kfkbrksrc-01:9092",
+  "target.cluster.alias": "cluster-dst",
+  "target.cluster.bootstrap.servers": "kfkbrkdst-00:9092,kfkbrkdst-01:9092"
+}
