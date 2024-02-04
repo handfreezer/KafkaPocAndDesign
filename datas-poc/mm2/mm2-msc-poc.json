@@ -1,10 +1,21 @@
 {
-  "connector.class": "org.apache.kafka.connect.mirror.MirrorSourceConnector",
   "name": "mm2-msc-poc",
+  "connector.class": "org.apache.kafka.connect.mirror.MirrorSourceConnector",
 
-  "tasks.max": "2",
-  "replication.factor": "1",
-  "offset-syncs.topic.location": "target",
+  "replication.policy.class": "net.ulukai.kafka.connect.mirror.RegexReplicationPolicy",
+  "replication.policy.regex.detect": "test(.*)",
+  "replication.policy.regex.replace": "demo-$1",
+
+  "tasks.max": "10",
+
+  "key.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+  "value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+
+
+  "errors.tolerance": "all",
+  "errors.retry.timeout": 0,
+  "errors.log.enable": true,
+  "errors.log.include.messages": true,
 
   "topics": ".*",
   "refresh.topics.enabled": true,
@@ -15,12 +26,12 @@
   "sync.topic.configs.enabled": false,
   "sync.topic.configs.interval.seconds": 60,
 
-  "transforms": "insertAppIdHeader,insertuuid",
-  "transforms.insertuuid.type": "net.ulukai.kafka.connect.smt.AddUuid",
-  "transforms.insertuuid.uuid.field.name": "uuid-fieldname",
-  "transforms.insertAppIdHeader.type": "org.apache.kafka.connect.transforms.InsertHeader",
-  "transforms.insertAppIdHeader.header": "ulukai.test",
-  "transforms.insertAppIdHeader.value.literal": "insertedHeaderValue",
+  "offset-syncs.topic.location": "target",
+  "offset-syncs.topic.replication.factor": 1,
+
+  "transforms": "addUuid",
+  "transforms.addUuid.type": "net.ulukai.kafka.connect.smt.AddUuid",
+  "transforms.addUuid.uuid.field.name": "pocMm2InConnectCluster",
 
   "source.cluster.alias": "cluster-src",
   "source.cluster.bootstrap.servers": "kfkbrksrc-00:9092,kfkbrksrc-01:9092",

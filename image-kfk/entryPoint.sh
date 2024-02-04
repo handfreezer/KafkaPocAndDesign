@@ -42,6 +42,12 @@ else
 			;;
 		connect)
 			echo "Launching Kafka Connect Node"
+			for jar in /kafka/connect/smt/*.jar
+			do
+				cpJar2LibDir=/kafka/bin/server/kafka/libs
+				echo "Duplicating [${jar}] to [${cpJar2LibDir}]"
+				cp -f ${jar} ${cpJar2LibDir}
+			done
 			exec "${DIR_KFK}/bin/connect-distributed.sh" "/kafka/connect/connect-distributed.properties"
 			;;
 		shell)

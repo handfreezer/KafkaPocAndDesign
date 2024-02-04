@@ -1,9 +1,14 @@
 {
   "name": "mm2-cpc-poc",
+  "connector.class": "org.apache.kafka.connect.mirror.MirrorCheckpointConnector",
+
+  "replication.policy.class": "net.ulukai.kafka.connect.mirror.RegexReplicationPolicy",
+  "replication.policy.regex.detect": "test(.*)",
+  "replication.policy.regex.replace": "demo-$1",
 
   "offset-syncs.topic.location": "target",
+  "checkpoints.topic.replication.factor": 1,
 
-  "connector.class": "org.apache.kafka.connect.mirror.MirrorCheckpointConnector",
   "key.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
   "value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
 
