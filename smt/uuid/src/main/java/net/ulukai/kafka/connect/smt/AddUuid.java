@@ -6,15 +6,17 @@ import org.apache.kafka.connect.header.Headers;
 import org.apache.kafka.connect.transforms.Transformation;
 import org.apache.kafka.connect.transforms.util.SimpleConfig;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 // this declaration in case of subclass instance needed
 // public abstract class AddUuid<R extends ConnectRecord<R>> implements Transformation<R> {
 public class AddUuid<R extends ConnectRecord<R>> implements Transformation<R> {
 
-	private static Logger logger = Logger.getLogger(AddUuid.class.toString());
+	private static final Logger log = LoggerFactory.getLogger(AddUuid.class);
 
 	public static final String OVERVIEW_DOC =
 		"Insert a random UUID into a connect record ";
@@ -35,7 +37,7 @@ public class AddUuid<R extends ConnectRecord<R>> implements Transformation<R> {
 	public void configure(Map<String, ?> props) {
 		final SimpleConfig config = new SimpleConfig(CONFIG_DEF, props);
 		this.fieldName = config.getString(ConfigName.UUID_FIELD_NAME);
-		AddUuid.logger.info("Field name value is " + this.fieldName);
+		AddUuid.log.info("Field name value is " + this.fieldName);
 	}
 
 
@@ -44,7 +46,7 @@ public class AddUuid<R extends ConnectRecord<R>> implements Transformation<R> {
 		Headers newHeaders = record.headers().duplicate();
 		String uuid = getRandomUuid();
 		newHeaders.addString("ulukai_" + this.fieldName, uuid);
-		AddUuid.logger.info("Adding uuid[" + uuid + "] to a message in topic " + record.topic() + " into field name ending with " +  this.fieldName);
+		AddUuid.log.debug("Adding uuid[" + uuid + "] to a message in topic " + record.topic() + " into field name ending with " +  this.fieldName);
 		return record.newRecord(record.topic(),
 				record.kafkaPartition(),
 				record.keySchema(),

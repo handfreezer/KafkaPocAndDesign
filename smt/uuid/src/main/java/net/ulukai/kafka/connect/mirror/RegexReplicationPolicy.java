@@ -2,6 +2,7 @@ package net.ulukai.kafka.connect.mirror;
 
 import org.apache.kafka.connect.mirror.DefaultReplicationPolicy;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,6 +19,9 @@ public class RegexReplicationPolicy extends DefaultReplicationPolicy {
 	private static final String REGEX_REPLACE_CONFIG = "replication.policy.regex.replace";
 	private Pattern patternDetect = Pattern.compile("(.*)");
 	private String regexReplace = "$1";
+	
+	HashMap<String, String> alreadySeen = new HashMap<String, String>();
+	HashMap<String, String> upstreamTopic = new HashMap<String, String>();
 	
     @Override
     public void configure(Map<String, ?> props) {
@@ -55,8 +59,22 @@ public class RegexReplicationPolicy extends DefaultReplicationPolicy {
     }
     
     public String formatRemoteTopic(String sourceClusterAlias, String topic) {
-    	String remoteTopicCalulated = sourceClusterAlias + DefaultReplicationPolicy.SEPARATOR_DEFAULT + this.transformTopic(topic);
-    	log.info("Format remote topic from [{}|{}] to [{}]", sourceClusterAlias, topic, remoteTopicCalulated);
+    	String key = sourceClusterAlias+topic;
+    	String remoteTopicCalulated = "error_not_initialized";
+    	if ( ! this.alreadySeen.containsKey(key) ) {
+    		remoteTopicCalulated = sourceClusterAlias + DefaultReplicationPolicy.SEPARATOR_DEFAULT + this.transformTopic(topic);
+    		this.alreadySeen.put(key,  remoteTopicCalulated);
+    		this.upstreamTopic.put(remoteTopicCalulated, topic);
+    		log.info("Format remote topic from [{}|{}] to [{}]", sourceClusterAlias, topic, remoteTopicCalulated);
+    	} else {
+    		remoteTopicCalulated = this.alreadySeen.get(key);
+    		log.debug("Format remote topic from [{}|{}] to [{}]", sourceClusterAlias, topic, remoteTopicCalulated);
+    	}
         return remoteTopicCalulated;
     }
+
+    public String upstreamTopic(String topic) {
+        return this.upstreamTopic.get(topic);
+    }
+
 }

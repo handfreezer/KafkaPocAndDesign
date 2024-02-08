@@ -29,15 +29,17 @@
             <version>${kafkaconnect.version}</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>connect-mirror</artifactId>
             <version>${kafkaconnect.version}</version>
             <scope>provided</scope>
         </dependency>
-
-
+		<dependency>
+			<groupId>io.confluent</groupId>
+		    <artifactId>kafka-schema-registry-client</artifactId>
+		    <version>${confluent.version}</version>
+		</dependency>
     </dependencies>
 
     <build>
