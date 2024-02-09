@@ -45,7 +45,7 @@ public class AddUuid<R extends ConnectRecord<R>> implements Transformation<R> {
 	public R apply(R record) {
 		Headers newHeaders = record.headers().duplicate();
 		String uuid = getRandomUuid();
-		newHeaders.addString("ulukai_" + this.fieldName, uuid);
+		newHeaders.addString(this.fieldName, uuid);
 		AddUuid.log.debug("Adding uuid[" + uuid + "] to a message in topic " + record.topic() + " into field name ending with " +  this.fieldName);
 		return record.newRecord(record.topic(),
 				record.kafkaPartition(),
