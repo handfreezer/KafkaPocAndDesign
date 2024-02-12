@@ -1,5 +1,5 @@
 {
-  "name": "mm2-msc-poc",
+  "name": "mm2-poc-msc",
   "connector.class": "org.apache.kafka.connect.mirror.MirrorSourceConnector",
 
   "replication.policy.class": "net.ulukai.kafka.connect.mirror.RegexReplicationPolicy",

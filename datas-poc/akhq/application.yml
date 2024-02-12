@@ -1,0 +1,14 @@
+akhq:
+  connections:
+    clusterSrc:
+      properties:
+        bootstrap.servers: kfkbrksrc-00:9092,kfkbrksrc-01:9092
+
+    clusterDst:
+      properties:
+        bootstrap.servers: kfkbrkdst-00:9092,kfkbrkdst-01:9092
+      connect:
+        - name: srvCntNode00
+          url: "http://kfkcnt-00:8083"
+        - name: srvCntNode01
+          url: "http://kfkcnt-01:8083"

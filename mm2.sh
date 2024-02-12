@@ -2,27 +2,20 @@ CONF_FOLDER="datas-poc/mm2"
 TARGET_HOST="localhost:8083"
 
 function validate_cluster_files() {
-  cluster=$1
-
-  if [ -z "$cluster" ]; then
-    echo "Cluster is empty"
-    exit 1
-  fi
-
   res=1
-  if [ ! -f "${CONF_FOLDER}/mm2-cpc-${cluster}.json" ]
+  if [ ! -f "${CLUSTER_CPC_JSON_PATH}" ]
   then
-    echo "Checkpoints conf is missing. Create file kafka-connect/mm2-cpc-${cluster}.json"
+    echo "Checkpoints conf is missing. Create file ${CLUSTER_CPC_JSON_PATH}"
     res=2
   fi
-  if [ ! -f "${CONF_FOLDER}/mm2-hbc-${cluster}.json" ]
+  if [ ! -f "${CLUSTER_HBC_JSON_PATH}" ]
   then
-    echo "Heartbeat conf is missing. Create file kafka-connect/mm2-hbc-${cluster}.json"
+    echo "Heartbeat conf is missing. Create file ${CLUSTER_HBC_JSON_PATH}"
     res=2
   fi
-  if [ ! -f "${CONF_FOLDER}/mm2-msc-${cluster}.json" ]
+  if [ ! -f "${CLUSTER_MSC_JSON_PATH}" ]
   then
-    echo "Source conf is missing. Create file kafka-connect/mm2-msc-${cluster}.json"
+    echo "Source conf is missing. Create file ${CLUSTER_MSC_JSON_PATH}"
     res=2
   fi
 
@@ -34,44 +27,43 @@ function validate_cluster_files() {
 
 
 function deploy_cluster() {
-  cluster=$1
-  worker=$2
+  worker=$1
 
   find smt/ -path '*/target/*.jar' -exec cp {} datas-poc/smt/ \;
 
   if [ -z "$worker" -o "cpc" = "$worker" ]
   then
-    CPC=$(curl -s http://${TARGET_HOST}/connectors/mm2-cpc-${cluster}/status | jq ".connector.state")
+    CPC=$(curl -s http://${TARGET_HOST}/connectors/${CLUSTER_CPC_NAME}/status | jq ".connector.state")
     if [ "$CPC" == '"RUNNING"' ]
     then
       echo "Checkpoints connector already deployed"
     else
       echo "Deploying checkpoints connector"
       curl -X PUT -H "Content-Type: application/json" \
-        --data @${CONF_FOLDER}/mm2-cpc-${cluster}.json \
-        -s -f http://${TARGET_HOST}/connectors/mm2-cpc-${cluster}/config >> /dev/null || \
+        --data @${CLUSTER_CPC_JSON_PATH} \
+        -s -f http://${TARGET_HOST}/connectors/${CLUSTER_CPC_NAME}/config >> /dev/null || \
         echo "ERROR: Failed to deploy checkpoints connector"
     fi
   fi
 
   if [ -z "$worker" -o "hbc" = "$worker" ]
   then
-    HBC=$(curl -s http://${TARGET_HOST}/connectors/mm2-hbc-${cluster}/status | jq ".connector.state")
+    HBC=$(curl -s http://${TARGET_HOST}/connectors/${CLUSTER_HBC_NAME}/status | jq ".connector.state")
     if [ "$HBC" == '"RUNNING"' ]
     then
       echo "Heartbeat connector already deployed"
     else
       echo "Deploying heartbeats connector"
       curl -X PUT -s -f -H "Content-Type: application/json" \
-        --data @${CONF_FOLDER}/mm2-hbc-${cluster}.json \
-        http://${TARGET_HOST}/connectors/mm2-hbc-${cluster}/config >> /dev/null || \
+        --data @${CLUSTER_HBC_JSON_PATH} \
+        http://${TARGET_HOST}/connectors/${CLUSTER_HBC_NAME}/config >> /dev/null || \
         echo "ERROR: Failed to deploy heartbeats connector"
     fi
   fi
 
   if [ -z "$worker" -o "msc" = "$worker" ]
   then
-    MSC=$(curl -s http://${TARGET_HOST}/connectors/mm2-msc-${cluster}/status | jq ".connector.state")
+    MSC=$(curl -s http://${TARGET_HOST}/connectors/${CLUSTER_MSC_NAME}/status | jq ".connector.state")
     if [ "$MSC" == '"RUNNING"' ]
     then
       echo "Source connector already deployed"
@@ -79,98 +71,107 @@ function deploy_cluster() {
       echo "Deploying source connector"
       #curl -X PUT -s -f -H "Content-Type: application/json" \
       curl -X PUT  -H "Content-Type: application/json" \
-        --data @${CONF_FOLDER}/mm2-msc-${cluster}.json \
-        http://${TARGET_HOST}/connectors/mm2-msc-${cluster}/config 1>>mm2.log 2>&1 || \
+        --data @${CLUSTER_MSC_JSON_PATH} \
+        http://${TARGET_HOST}/connectors/${CLUSTER_MSC_NAME}/config 1>>mm2.log 2>&1 || \
         echo "ERROR: Failed to deploy source connector"
     fi
   fi
 }
 
 function undeploy_cluster() {
-  cluster=$1
-  worker=$2
+  worker=$1
   if [ -z "$worker" -o "cpc" = "$worker" ]; then
-    curl -X DELETE -s -f http://${TARGET_HOST}/connectors/mm2-cpc-${cluster} || echo "WARN: checkpoints connector not found"
+    curl -X DELETE -s -f http://${TARGET_HOST}/connectors/${CLUSTER_CPC_NAME} || echo "WARN: checkpoints connector not found"
     echo "Checkpoints connector undeployed"
   fi
   if [ -z "$worker" -o "hbc" = "$worker" ]; then
-    curl -X DELETE -s -f http://${TARGET_HOST}/connectors/mm2-hbc-${cluster} || echo "WARN: heartbeats connector not found"
+    curl -X DELETE -s -f http://${TARGET_HOST}/connectors/${CLUSTER_HBC_NAME} || echo "WARN: heartbeats connector not found"
     echo "Heartbeats connector undeployed"
   fi
   if [ -z "$worker" -o "msc" = "$worker" ]; then
-    curl -X DELETE -s -f http://${TARGET_HOST}/connectors/mm2-msc-${cluster} || echo "WARN: source connector not found"
+    curl -X DELETE -s -f http://${TARGET_HOST}/connectors/${CLUSTER_MSC_NAME} || echo "WARN: source connector not found"
     echo "Source connector undeployed"
   fi
 
 }
-
+set -x
 action=$1
 cluster=$2
+
+if [ -z "$cluster" ]; then
+  echo "Cluster is empty"
+  exit 1
+fi
+
+CLUSTER_FOLDER="${CONF_FOLDER}/${cluster}"
+CLUSTER_CPC_NAME="mm2-${cluster}-cpc"
+CLUSTER_HBC_NAME="mm2-${cluster}-hbc"
+CLUSTER_MSC_NAME="mm2-${cluster}-msc"
+
+CLUSTER_CPC_JSON_PATH="${CLUSTER_FOLDER}/mm2-cpc.json"
+CLUSTER_HBC_JSON_PATH="${CLUSTER_FOLDER}/mm2-hbc.json"
+CLUSTER_MSC_JSON_PATH="${CLUSTER_FOLDER}/mm2-msc.json"
+
+validate_cluster_files
+
 case $action in
 
 deploy)
-  validate_cluster_files "$cluster"
   echo "Deploying cluster $cluster"
-  deploy_cluster "$cluster"
+  deploy_cluster 
   ;;
 
 deploy-cpc)
-  validate_cluster_files "$cluster"
   echo "Deploying CPC for cluster $cluster"
-  deploy_cluster "$cluster" "cpc"
+  deploy_cluster "cpc"
   ;;
 
 deploy-hbc)
-  validate_cluster_files "$cluster"
   echo "Deploying HBC for cluster $cluster"
-  deploy_cluster "$cluster" "hbc"
+  deploy_cluster "hbc"
   ;;
 
 deploy-msc)
-  validate_cluster_files "$cluster"
   echo "Deploying MSC for cluster $cluster"
-  deploy_cluster "$cluster" "msc"
+  deploy_cluster "msc"
   ;;
 
 undeploy)
   echo "Undeploying cluster $cluster"
-  undeploy_cluster "$cluster"
+  undeploy_cluster 
   ;;
 
 undeploy-CPC)
   echo "Undeploying CPC for cluster $cluster"
-  undeploy_cluster "$cluster" "cpc"
+  undeploy_cluster "cpc"
   ;;
 
 undeploy-hbc)
   echo "Undeploying HBC for cluster $cluster"
-  undeploy_cluster "$cluster" "hbc"
+  undeploy_cluster "hbc"
   ;;
 
 undeploy-msc)
   echo "Undeploying MSC for cluster $cluster"
-  undeploy_cluster "$cluster" "msc"
+  undeploy_cluster "msc"
   ;;
 
 redeploy)
-  validate_cluster_files "$cluster"
   echo "Redeploying cluster $cluster"
-  undeploy_cluster "$cluster"
-  deploy_cluster "$cluster"
+  undeploy_cluster 
+  deploy_cluster 
   ;;
 
 redeploy-msc)
-  validate_cluster_files "$cluster"
   echo "Redeploying MSC for cluster $cluster"
-  undeploy_cluster "$cluster" "msc"
-  deploy_cluster "$cluster" "msc"
+  undeploy_cluster "msc"
+  deploy_cluster "msc"
   ;;
 
 status)
-  # validate_cluster_files "$cluster"
-  CPC=$(curl -s http://${TARGET_HOST}/connectors/mm2-cpc-${cluster}/status | jq ".connector.state")
-  HBC=$(curl -s http://${TARGET_HOST}/connectors/mm2-hbc-${cluster}/status | jq ".connector.state")
-  MSC=$(curl -s http://${TARGET_HOST}/connectors/mm2-msc-${cluster}/status | jq ".connector.state")
+  CPC=$(curl -s http://${TARGET_HOST}/connectors/${CLUSTER_CPC_NAME}/status | jq ".connector.state")
+  HBC=$(curl -s http://${TARGET_HOST}/connectors/${CLUSTER_HBC_NAME}/status | jq ".connector.state")
+  MSC=$(curl -s http://${TARGET_HOST}/connectors/${CLUSTER_MSC_NAME}/status | jq ".connector.state")
   echo "Checkpoint connector: $CPC"
   echo "Heartbeat connector: $HBC"
   echo "Source connector: $MSC"
