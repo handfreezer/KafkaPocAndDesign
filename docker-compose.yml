@@ -26,8 +26,7 @@ x-kfk-cnt-cmn: &ptrKfkCntCmn
   networks:
     - netKfk
   volumes:
-    - ./datas-poc/connect/connect-distributed.properties:/kafka/connect/connect-distributed.properties
-    - ./datas-poc/smt:/kafka/connect/smt
+    - ./datas-poc/connect:/kafka/connect
   depends_on:
     kfkbrkdst-00:
       condition: service_healthy

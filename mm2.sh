@@ -94,7 +94,7 @@ function undeploy_cluster() {
   fi
 
 }
-set -x
+
 action=$1
 cluster=$2
 

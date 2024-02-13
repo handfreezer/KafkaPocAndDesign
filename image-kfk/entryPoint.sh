@@ -42,7 +42,7 @@ else
 			;;
 		connect)
 			echo "Launching Kafka Connect Node"
-			for jar in /kafka/connect/smt/*.jar
+			for jar in /kafka/connect/libs/*.jar
 			do
 				cpJar2LibDir=/kafka/bin/server/kafka/libs
 				echo "Duplicating [${jar}] to [${cpJar2LibDir}]"

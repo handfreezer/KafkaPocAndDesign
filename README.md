@@ -11,3 +11,5 @@ One SMT (Simple Message Transform) exemple : inserting a uuid in headers (have a
 One Replication Policy as exemple BUT very useful : a regex one : RegexReplicationPolicy !
 
 O, yeah!
+
+Note : SMT and replication policy was getting out to https://github.com/handfreezer/KafkaConnectExtensions and should be used by calling ./init-poc.sh the first time of use to get reease binaries from this repo.
