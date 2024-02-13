@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 public class RegexReplicationPolicy extends DefaultReplicationPolicy {
 
-    private static final Logger log = LoggerFactory.getLogger(RegexReplicationPolicy.class);
+    private static final Logger logger = LoggerFactory.getLogger(RegexReplicationPolicy.class);
 
 	private static final String REGEX_DETECT_CONFIG = "replication.policy.regex.detect";
 	private static final String REGEX_REPLACE_CONFIG = "replication.policy.regex.replace";
@@ -25,23 +25,21 @@ public class RegexReplicationPolicy extends DefaultReplicationPolicy {
 	
     @Override
     public void configure(Map<String, ?> props) {
-    	log.info("With {} , you can NOT change the separator.", this.getClass());
+    	logger.info("With {} , you can NOT change the separator.", this.getClass());
         if (props.containsKey(REGEX_REPLACE_CONFIG)) {
 		    if (! props.containsKey(REGEX_DETECT_CONFIG)) {
-	            log.error("Replace rule is defined but detect rule is not, so {} fallback to {}", this.getClass(), super.getClass());
+		    	logger.error("Replace rule is defined but detect rule is not, so {} fallback to {}", this.getClass(), super.getClass());
 		    } else {
 	            String regexDetect = (String) props.get(REGEX_DETECT_CONFIG);
-	            
 	            try {
-		            //this.patternDetect = Pattern.compile(Pattern.quote(regexDetect));
 		            this.patternDetect = Pattern.compile(regexDetect);
-		            log.info("Using regex detect rule: [{}]", regexDetect);
+		            logger.info("Using regex detect rule: [{}]", regexDetect);
 			        this.regexReplace = (String) props.get(REGEX_REPLACE_CONFIG);
-		            log.info("Using regex replace rule: [{}]", this.regexReplace);
+			        logger.info("Using regex replace rule: [{}]", this.regexReplace);
 	            } catch (PatternSyntaxException e) {
-	                log.error("Detect rule is NOT a valid regex [{}] : " + e.getMessage(), regexDetect);
+	            	logger.error("Detect rule is NOT a valid regex [{}] : {}", regexDetect, e.getMessage());
 	            } catch (IllegalStateException e) {
-	                log.error("Detect rule compile failed with exception: " + e.getMessage());
+	            	logger.error("Detect rule compile failed with exception: {}", e.getMessage());
 	            }
             }
         }
@@ -53,7 +51,7 @@ public class RegexReplicationPolicy extends DefaultReplicationPolicy {
             Matcher matcher = this.patternDetect.matcher(topic);
             result = matcher.replaceAll(this.regexReplace);
         } catch (IllegalStateException e) {
-            log.error("Replace rule failed with exception because of : " + e.getMessage());
+        	logger.error("Replace rule failed with exception because of : " + e.getMessage());
         }
 		return result;
     }
@@ -65,10 +63,10 @@ public class RegexReplicationPolicy extends DefaultReplicationPolicy {
     		remoteTopicCalulated = sourceClusterAlias + DefaultReplicationPolicy.SEPARATOR_DEFAULT + this.transformTopic(topic);
     		this.alreadySeen.put(key,  remoteTopicCalulated);
     		this.upstreamTopic.put(remoteTopicCalulated, topic);
-    		log.info("Format remote topic from [{}|{}] to [{}]", sourceClusterAlias, topic, remoteTopicCalulated);
+    		logger.info("Format remote topic from [{}|{}] to [{}]", sourceClusterAlias, topic, remoteTopicCalulated);
     	} else {
     		remoteTopicCalulated = this.alreadySeen.get(key);
-    		log.debug("Format remote topic from [{}|{}] to [{}]", sourceClusterAlias, topic, remoteTopicCalulated);
+    		logger.debug("Format remote topic from [{}|{}] to [{}]", sourceClusterAlias, topic, remoteTopicCalulated);
     	}
         return remoteTopicCalulated;
     }
@@ -76,5 +74,4 @@ public class RegexReplicationPolicy extends DefaultReplicationPolicy {
     public String upstreamTopic(String topic) {
         return this.upstreamTopic.get(topic);
     }
-
 }

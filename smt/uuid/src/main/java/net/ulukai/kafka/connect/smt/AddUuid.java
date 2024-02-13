@@ -16,7 +16,7 @@ import java.util.UUID;
 // public abstract class AddUuid<R extends ConnectRecord<R>> implements Transformation<R> {
 public class AddUuid<R extends ConnectRecord<R>> implements Transformation<R> {
 
-	private static final Logger log = LoggerFactory.getLogger(AddUuid.class);
+	private static final Logger logger = LoggerFactory.getLogger(AddUuid.class);
 
 	public static final String OVERVIEW_DOC =
 		"Insert a random UUID into a connect record ";
@@ -37,7 +37,7 @@ public class AddUuid<R extends ConnectRecord<R>> implements Transformation<R> {
 	public void configure(Map<String, ?> props) {
 		final SimpleConfig config = new SimpleConfig(CONFIG_DEF, props);
 		this.fieldName = config.getString(ConfigName.UUID_FIELD_NAME);
-		AddUuid.log.info("Field name value is " + this.fieldName);
+		logger.info("Field name value is " + this.fieldName);
 	}
 
 
@@ -46,7 +46,7 @@ public class AddUuid<R extends ConnectRecord<R>> implements Transformation<R> {
 		Headers newHeaders = record.headers().duplicate();
 		String uuid = getRandomUuid();
 		newHeaders.addString(this.fieldName, uuid);
-		AddUuid.log.debug("Adding uuid[" + uuid + "] to a message in topic " + record.topic() + " into field name ending with " +  this.fieldName);
+		logger.debug("Adding uuid[" + uuid + "] to a message in topic " + record.topic() + " into field name ending with " +  this.fieldName);
 		return record.newRecord(record.topic(),
 				record.kafkaPartition(),
 				record.keySchema(),

@@ -24,7 +24,7 @@ import java.util.Map;
 
 public class AvroToJson<R extends ConnectRecord<R>> implements Transformation<R> {
 
-	private static final Logger log = LoggerFactory.getLogger(AvroToJson.class);
+	private static final Logger logger = LoggerFactory.getLogger(AvroToJson.class);
 
 	public static final String OVERVIEW_DOC =
 		"Convert Value or key from Avro to Json according to SchemaRegistry ";
@@ -38,8 +38,6 @@ public class AvroToJson<R extends ConnectRecord<R>> implements Transformation<R>
 			.define(ConfigName.UUID_FIELD_NAME, ConfigDef.Type.STRING, "uuid", ConfigDef.Importance.HIGH, "Field name for UUID")
 			.define(ConfigName.A2J_SCHEMA_URL, ConfigDef.Type.STRING, "", ConfigDef.Importance.HIGH, "URL of schema registry");
 
-//	private static final String PURPOSE = "adding UUID to record";
-
 	private SchemaRegistryClient schemaRegistry = null;
 
 	@Override
@@ -49,10 +47,10 @@ public class AvroToJson<R extends ConnectRecord<R>> implements Transformation<R>
 		String schemaUrl = config.getString(ConfigName.A2J_SCHEMA_URL);
 		if ( 0 == schemaUrl.length() ) {
 			String errorMsg = "Schema Registry Url conf is missing";
-			AvroToJson.log.error(errorMsg);
+			logger.error(errorMsg);
 			throw new IllegalArgumentException(errorMsg);
 		}
-		AvroToJson.log.info("Schema Registry Url is " + schemaUrl);
+		logger.info("Schema Registry Url is " + schemaUrl);
 		this.schemaRegistry = new CachedSchemaRegistryClient(schemaUrl, 100);
 	}
 
@@ -60,10 +58,10 @@ public class AvroToJson<R extends ConnectRecord<R>> implements Transformation<R>
 		byte[] result = avroBinary.clone();
 		
 		if ( avroBinary.length <= 5 ) {
-			AvroToJson.log.warn("avro binary is too small (less then 5 bytes");
+			logger.warn("avro binary is too small (less then 5 bytes");
 		} else {
 			if ( 0 != avroBinary[0] ) {
-				AvroToJson.log.warn("avro binary doens't start with byte(0)");
+				logger.warn("avro binary doens't start with byte(0)");
 			} else {
 				int schemaId = ((avroBinary[1] & 0xFF) << 24) |
 						((avroBinary[2] & 0xFF) << 16) |
@@ -97,12 +95,12 @@ public class AvroToJson<R extends ConnectRecord<R>> implements Transformation<R>
 	public R apply(R record) {
 		R result = null;
 		if ( ! record.valueSchema().equals(Schema.BYTES_SCHEMA)) {
-			AvroToJson.log.warn("Schema of value is not BYTES, so no conversion! [valueSchema = " + record.valueSchema().toString() + " ]");
+			logger.warn("Schema of value is not BYTES, so no conversion! [valueSchema = " + record.valueSchema().toString() + " ]");
 			result = record;
 		} else {
 			byte[] byteValue = (byte[])record.value();
 			byte[] jsonValue = this.convertAvroToJson("subject",  byteValue);
-			AvroToJson.log.debug("Avro to JSON : JSON=[ " + jsonValue + " ]");
+			logger.debug("Avro to JSON : JSON=[ " + jsonValue + " ]");
 			result = record.newRecord(
 					record.topic(),
 					record.kafkaPartition(),
@@ -131,12 +129,12 @@ public class AvroToJson<R extends ConnectRecord<R>> implements Transformation<R>
 		public R apply(R record) {
 			R result = record;
 			if ( ! record.valueSchema().equals(Schema.BYTES_SCHEMA)) {
-				AvroToJson.log.warn("Schema of key is not BYTES, so no conversion! [keySchema = " + record.keySchema().toString() + " ]");
+				logger.warn("Schema of key is not BYTES, so no conversion! [keySchema = " + record.keySchema().toString() + " ]");
 				result = record;
 			} else {
 				byte[] byteKey = (byte[])record.key();
 				byte[] jsonValue = this.convertAvroToJson("subject",  byteKey);
-				AvroToJson.log.debug("Avro to JSON : JSON=[ " + jsonValue + " ]");
+				logger.debug("Avro to JSON : JSON=[ " + jsonValue + " ]");
 				result = record.newRecord(
 						record.topic(),
 						record.kafkaPartition(),
@@ -156,12 +154,12 @@ public class AvroToJson<R extends ConnectRecord<R>> implements Transformation<R>
 		public R apply(R record) {
 			R result = record;
 			if ( ! record.valueSchema().equals(Schema.BYTES_SCHEMA)) {
-				AvroToJson.log.warn("Schema of value is not BYTES, so no conversion! [valueSchema = " + record.valueSchema().toString() + " ]");
+				logger.warn("Schema of value is not BYTES, so no conversion! [valueSchema = " + record.valueSchema().toString() + " ]");
 				result = record;
 			} else {
 				byte[] byteValue = (byte[])record.value();
 				byte[] jsonValue = this.convertAvroToJson("subject",  byteValue);
-				AvroToJson.log.debug("Avro to JSON : JSON=[ " + jsonValue + " ]");
+				logger.debug("Avro to JSON : JSON=[ " + jsonValue + " ]");
 				result = record.newRecord(
 						record.topic(),
 						record.kafkaPartition(),
