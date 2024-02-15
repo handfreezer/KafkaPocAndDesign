@@ -29,8 +29,6 @@ function validate_cluster_files() {
 function deploy_cluster() {
   worker=$1
 
-  find smt/ -path '*/target/*.jar' -exec cp {} datas-poc/smt/ \;
-
   if [ -z "$worker" -o "cpc" = "$worker" ]
   then
     CPC=$(curl -s http://${TARGET_HOST}/connectors/${CLUSTER_CPC_NAME}/status | jq ".connector.state")

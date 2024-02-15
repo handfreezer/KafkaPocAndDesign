@@ -18,6 +18,7 @@
   "errors.log.include.messages": true,
 
   "topics": ".*",
+  "replication.factor": 1,
   "refresh.topics.enabled": true,
   "refresh.topics.interval.seconds": 10,
 

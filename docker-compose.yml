@@ -98,7 +98,7 @@ services:
     hostname: srccnt01
 
   kafka-ui:
-    image: provectuslabs/kafka-ui:latest
+    image: provectuslabs/kafka-ui:master
     volumes:
       - ./datas-poc/ui/config.yml:/etc/kafkaui/dynamic_config.yaml
     environment:

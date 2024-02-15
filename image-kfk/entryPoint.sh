@@ -52,6 +52,7 @@ else
 			;;
 		shell)
 			echo "Entering shell (bash)"
+			export PATH=${DIR_KFK}/bin:${PATH}
 			exec bash
 			;;
 		*)
