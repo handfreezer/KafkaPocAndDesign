@@ -1,9 +1,7 @@
 version: '3.8'
 
 x-kfk-img: &ptrKfkImg
-  build:
-    context: "./image-kfk"
-    dockerfile: "kraft.dockerfile"
+  image: ${IMG_KFK:?error}
 
 x-kfk-brk-cmn: &ptrKfkBrkCmn
   <<: *ptrKfkImg
