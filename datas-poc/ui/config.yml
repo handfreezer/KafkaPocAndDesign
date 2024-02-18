@@ -7,16 +7,3 @@ spring:
       name: poc
       password: cop
 
-kafka:
-  clusters:
-    - bootstrapServers: kfkbrksrc-00:9092,kfkbrksrc-01:9092
-      name: kfkBrkSrc
-
-    - bootstrapServers: kfkbrkdst-00:9092,kfkbrkdst-01:9092
-      name: kfkBrkDst
-      kafkaConnect:
-        - address: http://kfkcnt-00:8083
-          name: srvCntNode00
-        - address: http://kfkcnt-01:8083
-          name: srvCntNode01
-

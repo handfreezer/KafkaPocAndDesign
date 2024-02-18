@@ -10,4 +10,5 @@ rm -f .env
 
 find datas-poc/connect/{smt,libs} -name '*.jar' -exec rm -f {} \;
 find datas-poc/ -name 'kraft.*' -exec rm {} \;
+rm -f datas-poc/CA/{*.srl,*.csr,*.crt,*.key,*.p12,*.jks}
 
