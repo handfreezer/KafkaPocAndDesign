@@ -21,7 +21,7 @@ else
 		-noprompt
 fi
 
-function generateBrokerKey() {
+function generateClientKey() {
 	BRK_NAME="${1}"
 	if [ -e "${CA_DIR}/${BRK_NAME}.p12.jks" -a 0 -eq ${FORCE_RENEW_KEY} ]
 	then
@@ -47,13 +47,15 @@ function generateBrokerKey() {
 			-srcstoretype PKCS12 -srcstorepass ${PWD_P12} -srckeystore "${CA_DIR}/${BRK_NAME}.p12" \
 			-deststoretype PKCS12 -deststorepass ${PWD_JKS} -destkeystore "${CA_DIR}/${BRK_NAME}.p12.jks" \
 			-noprompt
-		cp "${CA_DIR}/ca.crt" "${CA_DIR}/${BRK_NAME}/ca.crt"
+		cp ${CA_DIR}/ca.{crt,jks} "${CA_DIR}/${BRK_NAME}/"
 		cp "${CA_DIR}/${BRK_NAME}.p12.jks" "${CA_DIR}/${BRK_NAME}/server.jks"
 	fi
 }
 
-generateBrokerKey "kfkbrksrc-00"
-generateBrokerKey "kfkbrksrc-01"
-generateBrokerKey "kfkbrkdst-00"
-generateBrokerKey "kfkbrkdst-01"
+generateClientKey "kfkbrksrc-00"
+generateClientKey "kfkbrksrc-01"
+generateClientKey "kfkbrkdst-00"
+generateClientKey "kfkbrkdst-01"
+generateClientKey "kafka-ui"
+generateClientKey "connect"
 echo "Generate ended"

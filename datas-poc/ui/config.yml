@@ -7,3 +7,28 @@ spring:
       name: poc
       password: cop
 
+kafka:
+  clusters:
+  - bootstrapServers: kfkbrksrc-00:9092,kfkbrksrc-01:9092
+    name: KfkBrkSrc
+    properties:
+      security.protocol: SSL
+      ssl.keystore.password: PwdJks
+      ssl.keystore.location: /etc/kafkaui/server.jks
+    readOnly: false
+    ssl:
+      truststoreLocation: /etc/kafkaui/ca.jks
+      truststorePassword: PwdJks
+  - bootstrapServers: kfkbrkdst-00:9092,kfkbrkdst-01:9092
+    name: KfkBrkDst
+    properties:
+      security.protocol: SSL
+      ssl.keystore.password: PwdJks
+      ssl.keystore.location: /etc/kafkaui/server.jks
+    readOnly: false
+    ssl:
+      truststoreLocation: /etc/kafkaui/ca.jks
+      truststorePassword: PwdJks
+rbac:
+  roles: []
+webclient: {}

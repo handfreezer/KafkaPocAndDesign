@@ -99,6 +99,8 @@ services:
     image: provectuslabs/kafka-ui:master
     volumes:
       - ./datas-poc/ui/config.yml:/etc/kafkaui/dynamic_config.yaml
+      - ./datas-poc/ui/ca.jks:/etc/kafkaui/ca.jks
+      - ./datas-poc/ui/server.jks:/etc/kafkaui/server.jks
     environment:
       DYNAMIC_CONFIG_ENABLED: 'true'
     networks:
