@@ -2,7 +2,7 @@
 
 KafkaConnectExtensions="1.0.0"
 KafkaIoConfluentDeps="7.5.1"
-KafkaIoConfluentPackages="kafka-schema-registry kafka-schema-registry-client toto"
+KafkaIoConfluentPackages="kafka-schema-registry kafka-schema-registry-client"
 ApacheAvro="1.11.3"
 
 ./999-reset-poc.sh

@@ -139,7 +139,7 @@ undeploy)
   undeploy_cluster 
   ;;
 
-undeploy-CPC)
+undeploy-cpc)
   echo "Undeploying CPC for cluster $cluster"
   undeploy_cluster "cpc"
   ;;

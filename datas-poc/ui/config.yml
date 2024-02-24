@@ -29,6 +29,11 @@ kafka:
     ssl:
       truststoreLocation: /etc/kafkaui/ca.jks
       truststorePassword: PwdJks
+    kafkaConnect:
+      - address: http://kfkcnt-00:8083
+        name: srvCntNode00
+      - address: http://kfkcnt-01:8083
+        name: srvCntNode01
 rbac:
   roles: []
 webclient: {}
