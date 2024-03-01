@@ -6,3 +6,6 @@
 	"source.cluster.security.protocol"
 	"target.cluster.security.protocol"
 
+  MirrorSourceConnector
+	"source.cluster/target.cluster/producer.override"
+
