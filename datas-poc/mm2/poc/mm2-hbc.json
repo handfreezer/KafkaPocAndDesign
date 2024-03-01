@@ -2,13 +2,8 @@
   "name": "mm2-poc-hbc",
   "connector.class": "org.apache.kafka.connect.mirror.MirrorHeartbeatConnector",
 
-  "replication.policy.class": "net.ulukai.kafka.connect.mirror.RegexReplicationPolicy",
-  "replication.policy.regex.detect": "test(.*)",
-  "replication.policy.regex.replace": "demo-$1",
-
   "emit.heartbeats.enabled": true,
   "emit.heartbeats.interval.seconds": 60,
-
   "heartbeats.topic.replication.factor": 1,
 
   "key.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
@@ -17,5 +12,26 @@
   "source.cluster.alias": "cluster-src",
   "source.cluster.bootstrap.servers": "kfkbrksrc-00:9092,kfkbrksrc-01:9092",
   "target.cluster.alias": "cluster-dst",
-  "target.cluster.bootstrap.servers": "kfkbrkdst-00:9092,kfkbrkdst-01:9092"
+  "target.cluster.bootstrap.servers": "kfkbrkdst-00:9092,kfkbrkdst-01:9092",
+
+  "security.protocol": "SSL",
+  "ssl.truststore.location": "/kafka/connect/mm2/mm2-poc-ca.jks",
+  "ssl.truststore.password": "PwdJks",
+  "ssl.keystore.location": "/kafka/connect/mm2/mm2-poc-key.jks",
+  "ssl.keystore.password": "PwdJks",
+  "ssl.key.password": "PwdJks",
+
+  "target.cluster.security.protocol": "SSL",
+  "target.cluster.ssl.truststore.location": "/kafka/connect/mm2/mm2-poc-ca.jks",
+  "target.cluster.ssl.truststore.password": "PwdJks",
+  "target.cluster.ssl.keystore.location": "/kafka/connect/mm2/mm2-poc-key.jks",
+  "target.cluster.ssl.keystore.password": "PwdJks",
+  "target.cluster.ssl.key.password": "PwdJks",
+
+  "producer.override.security.protocol": "SSL",
+  "producer.override.ssl.truststore.location": "/kafka/connect/mm2/mm2-poc-ca.jks",
+  "producer.override.ssl.truststore.password": "PwdJks",
+  "producer.override.ssl.keystore.location": "/kafka/connect/mm2/mm2-poc-key.jks",
+  "producer.override.ssl.keystore.password": "PwdJks",
+  "producer.override.ssl.key.password": "PwdJks"
 }
