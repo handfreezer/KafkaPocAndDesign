@@ -1,6 +1,7 @@
 From debian:bookworm-20240211
 
 env DEBIAN_FRONTEND=noninteractive
+env KFK_VERSION=3.7.0
 
 Run apt -y update &&\
 	apt -y upgrade &&\
@@ -13,7 +14,7 @@ Run apt install -y --no-install-recommends kcat
 
 Run mkdir -p /kafka/bin/server &&\
 	cd /kafka/bin/server &&\
-	curl -kvO "https://downloads.apache.org/kafka/3.6.1/kafka_2.13-3.6.1.tgz"  &&\
+	curl -kvO "https://downloads.apache.org/kafka/${KFK_VERSION}/kafka_2.13-${KFK_VERSION}.tgz"  &&\
 	tar xzvf kafka*.tgz &&\
 	rm -rf kafka*.tgz &&\
 	ln -sf /kafka/bin/server/kafka_* /kafka/bin/server/kafka 
