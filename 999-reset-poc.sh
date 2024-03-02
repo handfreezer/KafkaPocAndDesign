@@ -8,7 +8,11 @@ rm -f .env
 
 #docker system prune => shoud not be a good idea for everyone in POC environment
 
-find datas-poc/connect/{smt,libs} -name '*.jar' -exec rm -f {} \;
 find datas-poc/ -name 'kraft.*' -exec rm {} \;
 rm -f datas-poc/CA/{*.srl,*.csr,*.crt,*.key,*.p12,*.jks}
+
+for ext in srl csr crt key p12 jks
+do
+	find datas-poc/ -type f -name "*.${ext}" -exec rm -f {} \;
+done
 

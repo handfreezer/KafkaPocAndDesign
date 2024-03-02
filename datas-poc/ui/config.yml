@@ -14,20 +14,20 @@ kafka:
     properties:
       security.protocol: SSL
       ssl.keystore.password: PwdJks
-      ssl.keystore.location: /etc/kafkaui/ca-src-kafka-ui.jks
+      ssl.keystore.location: /etc/kafkaui/jks/ca-src-kafka-ui.jks
     readOnly: false
     ssl:
-      truststoreLocation: /etc/kafkaui/ca-src.jks
+      truststoreLocation: /etc/kafkaui/jks/ca-src.jks
       truststorePassword: PwdJks
   - bootstrapServers: kfkbrkdst-00:9092,kfkbrkdst-01:9092
     name: KfkBrkDst
     properties:
       security.protocol: SSL
       ssl.keystore.password: PwdJks
-      ssl.keystore.location: /etc/kafkaui/ca-dst-kafka-ui.jks
+      ssl.keystore.location: /etc/kafkaui/jks/ca-dst-kafka-ui.jks
     readOnly: false
     ssl:
-      truststoreLocation: /etc/kafkaui/ca-dst.jks
+      truststoreLocation: /etc/kafkaui/jks/ca-dst.jks
       truststorePassword: PwdJks
     kafkaConnect:
       - address: http://kfkcnt-00:8083
