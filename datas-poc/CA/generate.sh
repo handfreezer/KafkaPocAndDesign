@@ -13,10 +13,10 @@ function generateCA() {
 	then
 		echo "Key for [POC CA ${caRoot}] already exist, no change"
 	else
-		echo "Generate master CA"
+		echo "Generate master CA [${caRoot}]"
 		openssl req -new -nodes -x509 -days 365 -newkey rsa:4096 \
 			-keyout "${CA_DIR}/${caRoot}.key" -out "${CA_DIR}/${caRoot}.crt" -config "${CA_DIR}/${caRoot}.cnf"
-		echo "Forcing renew of ey for all signed certificates of client"
+		echo "Forcing renew of key for all signed certificates of client"
 		FORCE_RENEW_KEY=1
 		keytool -keystore "${CA_DIR}/${caRoot}.jks" \
 			-alias CA-POC \
