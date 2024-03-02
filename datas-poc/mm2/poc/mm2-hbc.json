@@ -3,8 +3,12 @@
   "connector.class": "org.apache.kafka.connect.mirror.MirrorHeartbeatConnector",
 
   "emit.heartbeats.enabled": true,
-  "emit.heartbeats.interval.seconds": 60,
+  "emit.heartbeats.interval.seconds": 10,
   "heartbeats.topic.replication.factor": 1,
+
+  "replication.policy.class": "net.ulukai.kafka.connect.mirror.RegexReplicationPolicy",
+  "replication.policy.regex.detect": "test(.*)",
+  "replication.policy.regex.replace": "demo-$1",
 
   "key.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
   "value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
