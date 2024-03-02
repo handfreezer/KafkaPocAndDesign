@@ -11,7 +11,7 @@ localityName = IDF
 organizationName = POC
 organizationalUnitName = kfk
 organizationalUnitName = ca
-commonName = CA-POC-KFK
+commonName = CA-POC-KFK-SRC
 
 [v3_ca]
 subjectKeyIdentifier=hash

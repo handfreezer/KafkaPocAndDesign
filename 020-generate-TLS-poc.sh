@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+#set -x
 
 BASE_DIR="/generate-tls"
 CA_DIR="${BASE_DIR}/CA"

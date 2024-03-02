@@ -15,23 +15,23 @@
   "target.cluster.bootstrap.servers": "kfkbrkdst-00:9092,kfkbrkdst-01:9092",
 
   "security.protocol": "SSL",
-  "ssl.truststore.location": "/kafka/connect/mm2/mm2-__MM2_CLUSTER_NAME__-ca.jks",
+  "ssl.truststore.location": "/kafka/connect/mm2/ca-dst.jks",
   "ssl.truststore.password": "PwdJks",
-  "ssl.keystore.location": "/kafka/connect/mm2/mm2-__MM2_CLUSTER_NAME__-key.jks",
+  "ssl.keystore.location": "/kafka/connect/mm2/ca-dst-mm2-__MM2_CLUSTER_NAME__.jks",
   "ssl.keystore.password": "PwdJks",
   "ssl.key.password": "PwdJks",
 
   "target.cluster.security.protocol": "SSL",
-  "target.cluster.ssl.truststore.location": "/kafka/connect/mm2/mm2-__MM2_CLUSTER_NAME__-ca.jks",
+  "target.cluster.ssl.truststore.location": "/kafka/connect/mm2/ca-dst.jks",
   "target.cluster.ssl.truststore.password": "PwdJks",
-  "target.cluster.ssl.keystore.location": "/kafka/connect/mm2/mm2-__MM2_CLUSTER_NAME__-key.jks",
+  "target.cluster.ssl.keystore.location": "/kafka/connect/mm2/ca-dst-mm2-__MM2_CLUSTER_NAME__.jks",
   "target.cluster.ssl.keystore.password": "PwdJks",
   "target.cluster.ssl.key.password": "PwdJks",
 
   "producer.override.security.protocol": "SSL",
-  "producer.override.ssl.truststore.location": "/kafka/connect/mm2/mm2-__MM2_CLUSTER_NAME__-ca.jks",
+  "producer.override.ssl.truststore.location": "/kafka/connect/mm2/ca-dst.jks",
   "producer.override.ssl.truststore.password": "PwdJks",
-  "producer.override.ssl.keystore.location": "/kafka/connect/mm2/mm2-__MM2_CLUSTER_NAME__-key.jks",
+  "producer.override.ssl.keystore.location": "/kafka/connect/mm2/ca-dst-mm2-__MM2_CLUSTER_NAME__.jks",
   "producer.override.ssl.keystore.password": "PwdJks",
   "producer.override.ssl.key.password": "PwdJks"
 }

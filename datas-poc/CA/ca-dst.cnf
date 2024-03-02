@@ -1,0 +1,20 @@
+[req]
+prompt = no
+distinguished_name = dn
+default_md = sha256
+default_bits = 4096
+x509_extensions = v3_ca
+
+[dn]
+countryName = FR
+localityName = IDF
+organizationName = POC
+organizationalUnitName = kfk
+organizationalUnitName = ca
+commonName = CA-POC-KFK-DST
+
+[v3_ca]
+subjectKeyIdentifier=hash
+basicConstraints = critical,CA:true
+authorityKeyIdentifier=keyid:always,issuer:always
+keyUsage = critical,keyCertSign,cRLSign

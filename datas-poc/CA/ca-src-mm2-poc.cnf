@@ -1,0 +1,28 @@
+[req]
+prompt = no
+distinguished_name = dn
+default_md = sha256
+default_bits = 4096
+req_extensions = v3_req
+
+[dn]
+countryName = FR
+localityName = IDF
+organizationName = POC
+organizationalUnitName = kfk
+organizationalUnitName = brk
+organizationalUnitName = connect
+commonName = mm2-poc
+
+[ v3_req ]
+subjectKeyIdentifier = hash
+basicConstraints = CA:FALSE
+nsComment = "OpenSSL Generated Certificate"
+keyUsage = critical, digitalSignature, keyEncipherment
+extendedKeyUsage = clientAuth
+subjectAltName = @alt_names
+
+[ alt_names ]
+DNS.1=mm2-poc
+DNS.2=real-FQDN
+DNS.3=localhost
