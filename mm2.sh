@@ -2,11 +2,11 @@ CONF_FOLDER="datas-poc/mm2"
 TARGET_HOST="localhost:8083"
 
 function validate_cluster_files() {
-  res=1
+  res=0
   if [ ! -f "${CLUSTER_CPC_JSON_PATH}" ]
   then
     echo "Checkpoints conf is missing. Create file ${CLUSTER_CPC_JSON_PATH}"
-    res=2
+    res=1
   fi
   if [ ! -f "${CLUSTER_HBC_JSON_PATH}" ]
   then
@@ -16,15 +16,21 @@ function validate_cluster_files() {
   if [ ! -f "${CLUSTER_MSC_JSON_PATH}" ]
   then
     echo "Source conf is missing. Create file ${CLUSTER_MSC_JSON_PATH}"
-    res=2
+    res=3
   fi
 
-  if [ $res == 2 ]
+  if [ 0 -ne $res ]
   then
-    exit 1
+    exit $res
   fi
 }
 
+function patch_cluster_files() {
+	for fic in ${CLUSTER_FOLDER}/*.json
+	do
+		sed "s/__MM2_CLUSTER_NAME__/${cluster}/g" <${fic} >${fic}.patched
+	done
+}
 
 function deploy_cluster() {
   worker=$1
@@ -38,7 +44,7 @@ function deploy_cluster() {
     else
       echo "Deploying checkpoints connector"
       curl -X PUT -H "Content-Type: application/json" \
-        --data @${CLUSTER_CPC_JSON_PATH} \
+        --data @${CLUSTER_CPC_JSON_PATH}.patched \
         -s -f http://${TARGET_HOST}/connectors/${CLUSTER_CPC_NAME}/config >> /dev/null || \
         echo "ERROR: Failed to deploy checkpoints connector"
     fi
@@ -53,7 +59,7 @@ function deploy_cluster() {
     else
       echo "Deploying heartbeats connector"
       curl -X PUT -s -f -H "Content-Type: application/json" \
-        --data @${CLUSTER_HBC_JSON_PATH} \
+        --data @${CLUSTER_HBC_JSON_PATH}.patched \
         http://${TARGET_HOST}/connectors/${CLUSTER_HBC_NAME}/config >> /dev/null || \
         echo "ERROR: Failed to deploy heartbeats connector"
     fi
@@ -69,7 +75,7 @@ function deploy_cluster() {
       echo "Deploying source connector"
       #curl -X PUT -s -f -H "Content-Type: application/json" \
       curl -X PUT  -H "Content-Type: application/json" \
-        --data @${CLUSTER_MSC_JSON_PATH} \
+        --data @${CLUSTER_MSC_JSON_PATH}.patched \
         http://${TARGET_HOST}/connectors/${CLUSTER_MSC_NAME}/config 1>>mm2.log 2>&1 || \
         echo "ERROR: Failed to deploy source connector"
     fi
@@ -111,6 +117,7 @@ CLUSTER_HBC_JSON_PATH="${CLUSTER_FOLDER}/mm2-hbc.json"
 CLUSTER_MSC_JSON_PATH="${CLUSTER_FOLDER}/mm2-msc.json"
 
 validate_cluster_files
+patch_cluster_files
 
 case $action in
 

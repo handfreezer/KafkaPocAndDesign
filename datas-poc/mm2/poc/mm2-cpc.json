@@ -1,5 +1,5 @@
 {
-  "name": "mm2-poc-cpc",
+  "name": "mm2-__MM2_CLUSTER_NAME__-cpc",
   "connector.class": "org.apache.kafka.connect.mirror.MirrorCheckpointConnector",
 
   "replication.policy.class": "net.ulukai.kafka.connect.mirror.RegexReplicationPolicy",
@@ -18,16 +18,16 @@
   "target.cluster.bootstrap.servers": "kfkbrkdst-00:9092,kfkbrkdst-01:9092",
 
   "source.cluster.security.protocol":"SSL",
-  "source.cluster.ssl.truststore.location": "/kafka/connect/mm2/mm2-poc-ca.jks",
+  "source.cluster.ssl.truststore.location": "/kafka/connect/mm2/mm2-__MM2_CLUSTER_NAME__-ca.jks",
   "source.cluster.ssl.truststore.password": "PwdJks",
-  "source.cluster.ssl.keystore.location": "/kafka/connect/mm2/mm2-poc-key.jks",
+  "source.cluster.ssl.keystore.location": "/kafka/connect/mm2/mm2-__MM2_CLUSTER_NAME__-key.jks",
   "source.cluster.ssl.keystore.password": "PwdJks",
   "source.cluster.ssl.key.password": "PwdJks",
 
   "target.cluster.security.protocol":"SSL",
-  "target.cluster.ssl.truststore.location": "/kafka/connect/mm2/mm2-poc-ca.jks",
+  "target.cluster.ssl.truststore.location": "/kafka/connect/mm2/mm2-__MM2_CLUSTER_NAME__-ca.jks",
   "target.cluster.ssl.truststore.password": "PwdJks",
-  "target.cluster.ssl.keystore.location": "/kafka/connect/mm2/mm2-poc-key.jks",
+  "target.cluster.ssl.keystore.location": "/kafka/connect/mm2/mm2-__MM2_CLUSTER_NAME__-key.jks",
   "target.cluster.ssl.keystore.password": "PwdJks",
   "target.cluster.ssl.key.password": "PwdJks"
 }

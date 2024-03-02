@@ -1,5 +1,5 @@
 {
-  "name": "mm2-poc-msc",
+  "name": "mm2-__MM2_CLUSTER_NAME__-msc",
   "connector.class": "org.apache.kafka.connect.mirror.MirrorSourceConnector",
 
   "replication.policy.class": "net.ulukai.kafka.connect.mirror.RegexReplicationPolicy",
@@ -31,7 +31,7 @@
 
   "transforms": "addUuid",
   "transforms.addUuid.type": "net.ulukai.kafka.connect.smt.AddUuid",
-  "transforms.addUuid.uuid.field.name": "pocMm2InConnectCluster",
+  "transforms.addUuid.uuid.field.name": "__MM2_CLUSTER_NAME__Mm2InConnectCluster",
 
   "source.cluster.alias": "cluster-src",
   "source.cluster.bootstrap.servers": "kfkbrksrc-00:9092,kfkbrksrc-01:9092",
@@ -39,23 +39,23 @@
   "target.cluster.bootstrap.servers": "kfkbrkdst-00:9092,kfkbrkdst-01:9092",
 
   "source.cluster.security.protocol":"SSL",
-  "source.cluster.ssl.truststore.location": "/kafka/connect/mm2/mm2-poc-ca.jks",
+  "source.cluster.ssl.truststore.location": "/kafka/connect/mm2/mm2-__MM2_CLUSTER_NAME__-ca.jks",
   "source.cluster.ssl.truststore.password": "PwdJks",
-  "source.cluster.ssl.keystore.location": "/kafka/connect/mm2/mm2-poc-key.jks",
+  "source.cluster.ssl.keystore.location": "/kafka/connect/mm2/mm2-__MM2_CLUSTER_NAME__-key.jks",
   "source.cluster.ssl.keystore.password": "PwdJks",
   "source.cluster.ssl.key.password": "PwdJks",
 
   "target.cluster.security.protocol":"SSL",
-  "target.cluster.ssl.truststore.location": "/kafka/connect/mm2/mm2-poc-ca.jks",
+  "target.cluster.ssl.truststore.location": "/kafka/connect/mm2/mm2-__MM2_CLUSTER_NAME__-ca.jks",
   "target.cluster.ssl.truststore.password": "PwdJks",
-  "target.cluster.ssl.keystore.location": "/kafka/connect/mm2/mm2-poc-key.jks",
+  "target.cluster.ssl.keystore.location": "/kafka/connect/mm2/mm2-__MM2_CLUSTER_NAME__-key.jks",
   "target.cluster.ssl.keystore.password": "PwdJks",
   "target.cluster.ssl.key.password": "PwdJks",
 
   "producer.override.security.protocol":"SSL",
-  "producer.override.ssl.truststore.location": "/kafka/connect/mm2/mm2-poc-ca.jks",
+  "producer.override.ssl.truststore.location": "/kafka/connect/mm2/mm2-__MM2_CLUSTER_NAME__-ca.jks",
   "producer.override.ssl.truststore.password": "PwdJks",
-  "producer.override.ssl.keystore.location": "/kafka/connect/mm2/mm2-poc-key.jks",
+  "producer.override.ssl.keystore.location": "/kafka/connect/mm2/mm2-__MM2_CLUSTER_NAME__-key.jks",
   "producer.override.ssl.keystore.password": "PwdJks",
   "producer.override.ssl.key.password": "PwdJks"
 }
