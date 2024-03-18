@@ -6,6 +6,13 @@ DIR_KRAFT="/kafka/kraft"
 DIR_KFK="/kafka/bin/server/kafka"
 KRAFT_CONFIG="${DIR_KRAFT}/kraft.properties"
 
+for jar in /kafka/libs/*.jar
+do
+	cpJar2LibDir=/kafka/bin/server/kafka/libs
+	echo "Duplicating [${jar}] to [${cpJar2LibDir}]"
+	cp -f ${jar} ${cpJar2LibDir}
+done
+
 if [ 0 -eq "${#}" ]
 then
 	echo "No command to entrypoint..."
@@ -42,12 +49,6 @@ else
 			;;
 		connect)
 			echo "Launching Kafka Connect Node"
-			for jar in /kafka/connect/libs/*.jar
-			do
-				cpJar2LibDir=/kafka/bin/server/kafka/libs
-				echo "Duplicating [${jar}] to [${cpJar2LibDir}]"
-				cp -f ${jar} ${cpJar2LibDir}
-			done
 			exec "${DIR_KFK}/bin/connect-distributed.sh" "/kafka/connect/connect-distributed.properties"
 			;;
 		shell)

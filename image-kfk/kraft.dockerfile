@@ -19,12 +19,13 @@ Run mkdir -p /kafka/bin/server &&\
 	rm -rf kafka*.tgz &&\
 	ln -sf /kafka/bin/server/kafka_* /kafka/bin/server/kafka 
 
-Run mkdir -p /kafka/kraft /kafka/logs /kafka/connect /kafka/mm2
+Run mkdir -p /kafka/kraft /kafka/logs /kafka/connect /kafka/mm2 /kafka/libs
 
 VOLUME ["/kafka/kraft"]
 VOLUME ["/kafka/logs"]
 VOLUME ["/kafka/connect"]
 VOLUME ["/kafka/mm2"]
+VOLUME ["/kafka/libs"]
 
 EXPOSE 9092
 EXPOSE 8083

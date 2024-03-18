@@ -25,6 +25,7 @@ x-kfk-cnt-cmn: &ptrKfkCntCmn
     - netKfk
   volumes:
     - ./datas-poc/connect:/kafka/connect
+    - ./datas-poc/libs:/kafka/libs
   depends_on:
     kfkbrkdst-00:
       condition: service_healthy
@@ -51,6 +52,7 @@ services:
         required: true
     volumes:
       - ./datas-poc/kfk/brk/src/00:/kafka/kraft
+      - ./datas-poc/libs:/kafka/libs
 
   kfkbrksrc-01:
     hostname: kfkbrksrc-01
@@ -62,6 +64,7 @@ services:
         required: true
     volumes:
       - ./datas-poc/kfk/brk/src/01:/kafka/kraft
+      - ./datas-poc/libs:/kafka/libs
 
   kfkbrkdst-00:
     hostname: kfkbrkdst-00
@@ -73,6 +76,7 @@ services:
         required: true
     volumes:
       - ./datas-poc/kfk/brk/dst/00:/kafka/kraft
+      - ./datas-poc/libs:/kafka/libs
 
   kfkbrkdst-01:
     hostname: kfkbrkdst-01
@@ -84,6 +88,7 @@ services:
         required: true
     volumes:
       - ./datas-poc/kfk/brk/dst/01:/kafka/kraft
+      - ./datas-poc/libs:/kafka/libs
 
   kfkcnt-00:
     <<: *ptrKfkCntCmn

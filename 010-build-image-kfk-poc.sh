@@ -2,7 +2,7 @@
 
 BUILD_DATE=$(date +%Y%m%d-%H%M%S)
 
-docker build -t kfk:${BUILD_DATE} -f image-kfk/kraft.dockerfile image-kfk
+docker build -t kfk:${BUILD_DATE} -f image-kfk/kraft.dockerfile "${@}" image-kfk
 res=$?
 if [ 0 -ne "${res}" ]
 then
