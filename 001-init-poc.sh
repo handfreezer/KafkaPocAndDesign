@@ -19,6 +19,8 @@ rm -f datas-poc/libs/*.jar
 	cd datas-poc/libs
 	wget https://github.com/handfreezer/KafkaConnectExtensions/releases/download/${KafkaConnectExtensions}/ulukai-kafka-connect-mirror-${KafkaConnectExtensions}.jar 1>/dev/null 2>&1
 	echo "Mirror > ${?}"
+	wget https://github.com/handfreezer/KafkaConnectExtensions/releases/download/${KafkaConnectExtensions}/ulukai-kafka-broker-groupkafkaprincipal-${KafkaConnectExtensions}.jar 1>/dev/null 2>&1
+	echo "GroupsKafkaPrincipals > ${?}"
 	wget https://repo1.maven.org/maven2/org/apache/avro/avro/${ApacheAvro}/avro-${ApacheAvro}.jar 1>/dev/null 2>&1
 	echo "Avro > ${?}"
 	for dep in ${KafkaIoConfluentPackages}
@@ -26,7 +28,7 @@ rm -f datas-poc/libs/*.jar
 		wget https://packages.confluent.io/maven/io/confluent/${dep}/${KafkaIoConfluentDeps}/${dep}-${KafkaIoConfluentDeps}.jar 1>/dev/null 2>&1
 		echo "${dep} > ${?}"
 	done
-	cp /root/git/KafkaConnectExtensions/broker/target/ulukai-kafka-broker-groupkafkaprincipal-1.0.0.jar . 1>/dev/null 2>&1
+	cp ~/git/KafkaConnectExtensions/broker/target/ulukai-kafka-broker-groupkafkaprincipal-*.jar . 1>/dev/null 2>&1
 	echo "GroupsKafkaPrincipals > ${?}"
 )	
 

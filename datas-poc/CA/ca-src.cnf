@@ -9,8 +9,7 @@ x509_extensions = v3_ca
 countryName = FR
 localityName = IDF
 organizationName = POC
-organizationalUnitName = kfk
-organizationalUnitName = ca
+organizationalUnitName = kfk-ca
 commonName = CA-POC-KFK-SRC
 
 [v3_ca]

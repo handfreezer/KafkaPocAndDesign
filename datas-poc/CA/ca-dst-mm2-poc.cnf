@@ -9,9 +9,7 @@ req_extensions = v3_req
 countryName = FR
 localityName = IDF
 organizationName = POC
-organizationalUnitName = kfk
-organizationalUnitName = brk
-organizationalUnitName = connect
+organizationalUnitName = kfk-brk-cnt
 commonName = mm2-poc
 
 [ v3_req ]

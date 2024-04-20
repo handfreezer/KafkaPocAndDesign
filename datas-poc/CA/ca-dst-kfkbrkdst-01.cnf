@@ -9,9 +9,7 @@ req_extensions = v3_req
 countryName = FR
 localityName = IDF
 organizationName = POC
-organizationalUnitName = kfk
-organizationalUnitName = brk
-organizationalUnitName = dst
+organizationalUnitName = kfk-brk-dst
 commonName = kfkbrkdst-01
 
 [ v3_req ]

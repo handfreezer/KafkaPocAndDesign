@@ -9,9 +9,7 @@ req_extensions = v3_req
 countryName = FR
 localityName = IDF
 organizationName = POC
-organizationalUnitName = kfk
-organizationalUnitName = brk
-organizationalUnitName = ui
+organizationalUnitName = kfk-brk-ui
 commonName = kafka-ui
 
 [ v3_req ]
