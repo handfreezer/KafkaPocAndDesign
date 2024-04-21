@@ -1,0 +1,8 @@
+security.protocol=SSL
+ssl.truststore.location=/kafka/acls/dst/ca-dst.jks
+ssl.truststore.password=PwdJks
+ssl.keystore.location=/kafka/acls/dst/ca-dst-acls-dst.jks
+ssl.keystore.password=PwdJks
+ssl.key.password=PwdJks
+ssl.client.auth=required
+

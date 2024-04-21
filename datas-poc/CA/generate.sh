@@ -33,26 +33,27 @@ function generateClientKey() {
 	then
 		echo "Key for [${CLIENT_CRT}] already exist, no change"
 	else
-		echo "Generate certificate for ${CLIENT_CRT}"
-		openssl genrsa -out "${CA_DIR}/${CLIENT_CRT}.key" 4096
-		openssl req -new -config "${CA_DIR}/${CLIENT_CRT}.cnf" -key "${CA_DIR}/${CLIENT_CRT}.key" -out "${CA_DIR}/${CLIENT_CRT}.csr"
+		echo "Generate certificate for ${CLIENT_CRT}"|tee -a generateCA.log
+		openssl genrsa -out "${CA_DIR}/${CLIENT_CRT}.key" 4096 >>generateCA.log 2>&1
+		openssl req -new -config "${CA_DIR}/${CLIENT_CRT}.cnf" -key "${CA_DIR}/${CLIENT_CRT}.key" -out "${CA_DIR}/${CLIENT_CRT}.csr" >>generateCA.log 2>&1
 		#Easiest way, but not secured
-		#openssl x509 -req -days 364 -sha256 -copy_extensions copyall -in "${CA_DIR}/${CLIENT_CRT}.csr" -CA "${CA_DIR}/${caRoot}.crt" -CAkey "${CA_DIR}/${caRoot}.key" -CAcreateserial -out "${CA_DIR}/${CLIENT_CRT}.crt"
+		#openssl x509 -req -days 364 -sha256 -copy_extensions copyall -in "${CA_DIR}/${CLIENT_CRT}.csr" -CA "${CA_DIR}/${caRoot}.crt" -CAkey "${CA_DIR}/${caRoot}.key" -CAcreateserial -out "${CA_DIR}/${CLIENT_CRT}.crt" >>generateCA.log 2>&1
 		openssl x509 -req -days 364 -sha256 \
 			-CA "${CA_DIR}/${caRoot}.crt" -CAkey "${CA_DIR}/${caRoot}.key" -CAcreateserial \
 			-in "${CA_DIR}/${CLIENT_CRT}.csr" -out "${CA_DIR}/${CLIENT_CRT}.crt" \
-			-extfile "${CA_DIR}/${CLIENT_CRT}.cnf" -extensions v3_req
+			-extfile "${CA_DIR}/${CLIENT_CRT}.cnf" -extensions v3_req >>generateCA.log 2>&1
 		openssl pkcs12 -export \
 			-in "${CA_DIR}/${CLIENT_CRT}.crt" \
 			-inkey "${CA_DIR}/${CLIENT_CRT}.key" \
 			-chain -CAfile "${CA_DIR}/${caRoot}.crt" \
 			-name ${CLIENT_NAME} \
 			-out "${CA_DIR}/${CLIENT_CRT}.p12" \
-			-password "pass:${PWD_P12}"
+			-password "pass:${PWD_P12}" >>generateCA.log 2>&1
 		keytool -importkeystore \
 			-srcstoretype PKCS12 -srcstorepass ${PWD_P12} -srckeystore "${CA_DIR}/${CLIENT_CRT}.p12" \
 			-deststoretype PKCS12 -deststorepass ${PWD_JKS} -destkeystore "${CA_DIR}/${CLIENT_CRT}.p12.jks" \
-			-noprompt
+			-noprompt >>generateCA.log 2>&1
+		res_keytool=${?}
 		if [ ! "mm2" = "${CLIENT_NAME:0:3}" ]
 		then
 			cp ${CA_DIR}/${caRoot}.{jks,crt} "${CA_DIR}/${CLIENT_NAME}/"
@@ -60,6 +61,12 @@ function generateClientKey() {
 		else
 			cp "${CA_DIR}/${caRoot}.jks" "${CA_DIR}/mm2/${caRoot}.jks"
 			cp "${CA_DIR}/${CLIENT_CRT}.p12.jks" "${CA_DIR}/mm2/${CLIENT_CRT}.jks"
+		fi
+		if [ 0 -eq "${res_keytool=}" ]
+		then
+			echo " ==> OK"|tee -a generateCA.log
+		else
+			echo " !!> FAILED"|tee -a generateCA.log
 		fi
 	fi
 }
@@ -70,6 +77,7 @@ generateClientKey "kfkbrksrc-01"
 generateClientKey "producer"
 generateClientKey "kafka-ui"
 generateClientKey "mm2-poc"
+generateClientKey "acls-src"
 
 generateCA "dst"
 generateClientKey "kfkbrkdst-00"
@@ -77,5 +85,6 @@ generateClientKey "kfkbrkdst-01"
 generateClientKey "connect"
 generateClientKey "kafka-ui"
 generateClientKey "mm2-poc"
+generateClientKey "acls-dst"
 
 echo "Generate ended"

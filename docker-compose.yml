@@ -53,6 +53,7 @@ services:
     volumes:
       - ./datas-poc/kfk/brk/src/00:/kafka/kraft
       - ./datas-poc/libs:/kafka/libs
+      - ./datas-poc/acls:/kafka/acls
 
   kfkbrksrc-01:
     hostname: kfkbrksrc-01

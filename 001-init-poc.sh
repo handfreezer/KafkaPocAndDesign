@@ -1,9 +1,15 @@
 #!/bin/bash
 
-KafkaConnectExtensions="1.0.0"
+KafkaConnectExtensions="1.2.0"
 KafkaIoConfluentDeps="7.5.1"
 KafkaIoConfluentPackages="kafka-schema-registry kafka-schema-registry-client"
 ApacheAvro="1.11.3"
+
+modeDev=0
+if [ 0 -lt "${#}" ]
+then
+	modeDev=${1}
+fi
 
 ./999-reset-poc.sh
 
@@ -14,6 +20,11 @@ rm -f datas-poc/libs/*.jar
 	cd datas-poc/connect/smt
 	wget https://github.com/handfreezer/KafkaConnectExtensions/releases/download/${KafkaConnectExtensions}/ulukai-kafka-connect-smt-${KafkaConnectExtensions}.jar 1>/dev/null 2>&1
 	echo "SMT > ${?}"
+	if [ 0 -lt "${modeDev}" ]
+	then
+		cp ~/git/KafkaConnectExtensions/smt/target/ulukai-kafka-connect-smt-*.jar . 1>/dev/null 2>&1
+		echo "DEV - SMT > ${?}"
+	fi
 )
 (
 	cd datas-poc/libs
@@ -28,7 +39,10 @@ rm -f datas-poc/libs/*.jar
 		wget https://packages.confluent.io/maven/io/confluent/${dep}/${KafkaIoConfluentDeps}/${dep}-${KafkaIoConfluentDeps}.jar 1>/dev/null 2>&1
 		echo "${dep} > ${?}"
 	done
-	cp ~/git/KafkaConnectExtensions/broker/target/ulukai-kafka-broker-groupkafkaprincipal-*.jar . 1>/dev/null 2>&1
-	echo "GroupsKafkaPrincipals > ${?}"
+	if [ 0 -lt "${modeDev}" ]
+	then
+		cp ~/git/KafkaConnectExtensions/broker/target/ulukai-kafka-broker-groupkafkaprincipal-*.jar . 1>/dev/null 2>&1
+		echo "DEV - GroupsKafkaPrincipals > ${?}"
+	fi
 )	
 
