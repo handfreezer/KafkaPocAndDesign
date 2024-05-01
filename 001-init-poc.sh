@@ -1,6 +1,6 @@
 #!/bin/bash
 
-KafkaConnectExtensions="1.2.0"
+KafkaConnectExtensions="1.3.0"
 KafkaIoConfluentDeps="7.5.1"
 KafkaIoConfluentPackages="kafka-schema-registry kafka-schema-registry-client"
 ApacheAvro="1.11.3"

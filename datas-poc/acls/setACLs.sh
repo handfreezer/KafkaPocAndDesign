@@ -64,6 +64,26 @@ else
 			--group ConnectClusterGroupId 
 	done
 
+	echo "Inserting ACLs for MM2 instance : read on Src"
+	principal="Regex:OU=kfk-mm2-src,"
+	for host in 00
+	do
+		kafkaAclSrc ${host} --topic "*" --add --allow-principal ${principal}   --allow-host "*" --operation Read --operation DescribeConfigs
+		kafkaAclSrc ${host} --cluster "*" --add --allow-principal ${principal} --allow-host "*" --operation Describe --operation DescribeConfigs
+		kafkaAclSrc ${host} --group "*" --add --allow-principal ${principal}   --allow-host "*" --operation Describe
+	done
+
+	echo "Inserting ACLs for MM2 instance : write on Dst"
+	principal="Regex:OU=kfk-mm2-dst,"
+	for host in 00
+	do
+		kafkaAclDst ${host} --topic 'heartbeats' --add --allow-principal ${principal}   --allow-host "*" --operation All
+		kafkaAclDst ${host} --resource-pattern-type "PREFIXED" --topic "cluster-src" --add --allow-principal ${principal}   --allow-host "*" --operation All
+	#	kafkaAclDst ${host} --topic "*" --add --allow-principal ${principal}   --allow-host "*" --operation All
+	#	kafkaAclDst ${host} --cluster "*" --add --allow-principal ${principal} --allow-host "*" --operation All
+	#	kafkaAclDst ${host} --group "*" --add --allow-principal ${principal}   --allow-host "*" --operation All
+	done
+
 	echo
 	echo "====== ACLs List of Source Cluster ==================================="
 	echo
