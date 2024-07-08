@@ -1,25 +1,25 @@
-From debian:bookworm-20240211
+FROM debian:bookworm-20240701
 
-env DEBIAN_FRONTEND=noninteractive
-env KFK_VERSION=3.7.0
+ENV DEBIAN_FRONTEND=noninteractive
+ENV KFK_VERSION=3.7.1
 
-Run apt -y update &&\
+RUN apt -y update &&\
 	apt -y upgrade &&\
 	apt install -y --no-install-recommends \
 		vim git curl wget python3 procps
 
-Run apt install -y --no-install-recommends openjdk-17-jre-headless
-Run apt install -y --no-install-recommends ca-certificates
-Run apt install -y --no-install-recommends kcat
+RUN apt install -y --no-install-recommends openjdk-17-jre-headless
+RUN apt install -y --no-install-recommends ca-certificates
+RUN apt install -y --no-install-recommends kcat
 
-Run mkdir -p /kafka/bin/server &&\
+RUN mkdir -p /kafka/bin/server &&\
 	cd /kafka/bin/server &&\
 	curl -kvO "https://downloads.apache.org/kafka/${KFK_VERSION}/kafka_2.13-${KFK_VERSION}.tgz"  &&\
 	tar xzvf kafka*.tgz &&\
 	rm -rf kafka*.tgz &&\
 	ln -sf /kafka/bin/server/kafka_* /kafka/bin/server/kafka 
 
-Run mkdir -p /kafka/kraft /kafka/logs /kafka/connect /kafka/mm2 /kafka/libs /kafka/acls
+RUN mkdir -p /kafka/kraft /kafka/logs /kafka/connect /kafka/mm2 /kafka/libs /kafka/acls
 
 VOLUME ["/kafka/kraft"]
 VOLUME ["/kafka/logs"]

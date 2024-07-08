@@ -1,5 +1,3 @@
-version: '3.8'
-
 x-kfk-img: &ptrKfkImg
   image: ${IMG_KFK:?error}
 
