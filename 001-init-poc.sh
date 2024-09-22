@@ -1,6 +1,6 @@
 #!/bin/bash
 
-KafkaConnectExtensions="1.3.0"
+KafkaConnectExtensions="1.4.0"
 KafkaIoConfluentDeps="7.5.1"
 KafkaIoConfluentPackages="kafka-schema-registry kafka-schema-registry-client"
 ApacheAvro="1.11.3"
@@ -41,6 +41,8 @@ rm -f datas-poc/libs/*.jar
 	done
 	if [ 0 -lt "${modeDev}" ]
 	then
+		cp ~/git/KafkaConnectExtensions/mirror/target/ulukai-kafka-connect-mirror-*.jar . 1>/dev/null 2>&1
+		echo "DEV - Connect-Mirror > ${?}"
 		cp ~/git/KafkaConnectExtensions/broker/target/ulukai-kafka-broker-groupkafkaprincipal-*.jar . 1>/dev/null 2>&1
 		echo "DEV - GroupsKafkaPrincipals > ${?}"
 	fi

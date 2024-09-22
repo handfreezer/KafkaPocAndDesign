@@ -34,7 +34,7 @@ else
 	echo
 	
 	echo "Inserting ACLs for kafka-ui as read-only browser"
-	principal="Regex:OU=kfk-brk-ui,"
+	principal="AclRegex:OU=kfk-brk-ui,"
 	for host in 00
 	do
 		kafkaAclSrc ${host} --topic "*" --add --allow-principal ${principal}   --allow-host "*" --operation Read --operation DescribeConfigs
@@ -53,7 +53,7 @@ else
 	done
 
 	echo "Inserting ACLs for Connect Cluster on Destination Cluster only"
-	principal="Regex:CN=cluster-connect-dst,"
+	principal="AclRegex:CN=cluster-connect-dst,"
 	for host in 00
 	do
 		kafkaAclDst ${host} --add --allow-principal ${principal}   --allow-host "*" --operation Create --operation Read --operation Write \
@@ -65,7 +65,7 @@ else
 	done
 
 	echo "Inserting ACLs for MM2 instance : read on Src"
-	principal="Regex:OU=kfk-mm2-src,"
+	principal="AclRegex:OU=kfk-mm2-src,"
 	for host in 00
 	do
 		kafkaAclSrc ${host} --topic "*" --add --allow-principal ${principal}   --allow-host "*" --operation Read --operation DescribeConfigs
@@ -74,7 +74,7 @@ else
 	done
 
 	echo "Inserting ACLs for MM2 instance : write on Dst"
-	principal="Regex:OU=kfk-mm2-dst,"
+	principal="AclRegex:OU=kfk-mm2-dst,"
 	for host in 00
 	do
 		kafkaAclDst ${host} --topic 'heartbeats' --add --allow-principal ${principal}   --allow-host "*" --operation All
