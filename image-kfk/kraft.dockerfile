@@ -1,7 +1,7 @@
-FROM debian:bookworm-20240701
+FROM debian:bookworm-20240904
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV KFK_VERSION=3.7.1
+ENV KFK_VERSION=3.8.0
 
 RUN apt -y update &&\
 	apt -y upgrade &&\
